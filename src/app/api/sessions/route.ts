@@ -10,11 +10,11 @@ export async function GET(req: NextRequest) {
   const offset = searchParams.get('offset');
 
   const opts: Parameters<typeof getSessions>[0] = {};
-  if (chainId) opts!.chainId = Number(chainId);
-  if (status === 'active') opts!.isRevoked = false;
-  if (status === 'revoked') opts!.isRevoked = true;
-  if (limit) opts!.limit = Number(limit);
-  if (offset) opts!.offset = Number(offset);
+  if (chainId) opts.chainId = Number(chainId);
+  if (status === 'active') opts.isRevoked = false;
+  if (status === 'revoked') opts.isRevoked = true;
+  if (limit) opts.limit = Number(limit);
+  if (offset) opts.offset = Number(offset);
 
   try {
     const sessions = await getSessions(opts);
