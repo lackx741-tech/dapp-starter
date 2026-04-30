@@ -1,0 +1,46 @@
+[
+  {
+    "name": "createSession",
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "name": "smartAccount", "type": "address" },
+      { "name": "sessionHash", "type": "bytes32" },
+      { "name": "expiry", "type": "uint256" }
+    ],
+    "outputs": []
+  },
+  {
+    "name": "validateSession",
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": [
+      { "name": "smartAccount", "type": "address" },
+      { "name": "sessionHash", "type": "bytes32" }
+    ],
+    "outputs": [{ "name": "valid", "type": "bool" }]
+  },
+  {
+    "name": "revokeSession",
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "name": "smartAccount", "type": "address" },
+      { "name": "sessionHash", "type": "bytes32" }
+    ],
+    "outputs": []
+  },
+  {
+    "name": "getSession",
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": [
+      { "name": "smartAccount", "type": "address" },
+      { "name": "sessionHash", "type": "bytes32" }
+    ],
+    "outputs": [
+      { "name": "expiry", "type": "uint256" },
+      { "name": "active", "type": "bool" }
+    ]
+  }
+]

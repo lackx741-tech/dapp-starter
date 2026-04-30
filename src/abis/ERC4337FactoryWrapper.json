@@ -1,0 +1,24 @@
+[
+  {
+    "name": "createAccount",
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "name": "salt", "type": "bytes32" },
+      { "name": "owners", "type": "address[]" },
+      { "name": "threshold", "type": "uint256" }
+    ],
+    "outputs": [{ "name": "account", "type": "address" }]
+  },
+  {
+    "name": "getAddress",
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": [
+      { "name": "salt", "type": "bytes32" },
+      { "name": "owners", "type": "address[]" },
+      { "name": "threshold", "type": "uint256" }
+    ],
+    "outputs": [{ "name": "account", "type": "address" }]
+  }
+]

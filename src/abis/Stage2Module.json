@@ -1,0 +1,27 @@
+[
+  {
+    "name": "imageHash",
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32" }]
+  },
+  {
+    "name": "upgradeTo",
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "inputs": [{ "name": "implementation", "type": "address" }],
+    "outputs": []
+  },
+  {
+    "name": "execute",
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "name": "target", "type": "address" },
+      { "name": "value", "type": "uint256" },
+      { "name": "data", "type": "bytes" }
+    ],
+    "outputs": []
+  }
+]
