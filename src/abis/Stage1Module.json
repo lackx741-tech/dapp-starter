@@ -1,0 +1,26 @@
+[
+  {
+    "name": "imageHash",
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32" }]
+  },
+  {
+    "name": "getOwners",
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address[]" }]
+  },
+  {
+    "name": "isValidSignature",
+    "type": "function",
+    "stateMutability": "view",
+    "inputs": [
+      { "name": "hash", "type": "bytes32" },
+      { "name": "signature", "type": "bytes" }
+    ],
+    "outputs": [{ "name": "magicValue", "type": "bytes4" }]
+  }
+]
