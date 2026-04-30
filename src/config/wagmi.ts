@@ -32,7 +32,9 @@ const config = createConfig({
       metadata: {
         name: 'dApp Starter',
         description: 'Plug-and-play Next.js dApp with ERC-4337 smart accounts',
-        url: typeof window !== 'undefined' ? window.location.origin : 'https://dapp-starter.vercel.app',
+        url: typeof window !== 'undefined'
+          ? window.location.origin
+          : (process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
         icons: ['https://avatars.githubusercontent.com/u/37784886'],
       },
       showQrModal: true,

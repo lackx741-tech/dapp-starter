@@ -1,20 +1,20 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId, useSignMessage } from 'wagmi';
 import type { Hex } from 'viem';
 import { buildBatchUserOp, type Call } from '@/lib/batchCall';
-import { sendUserOp } from '@/lib/userOp';
+import { getUserOpHash, sendUserOp, type UserOperation } from '@/lib/userOp';
 
 /**
  * Return type for the `useBatchCall` hook.
  */
 export interface UseBatchCallReturn {
   /**
-   * Executes a batch of calls via BatchMulticall through an ERC-4337 UserOperation.
+   * Builds, signs, and sends a batch of calls via BatchMulticall through an ERC-4337 UserOperation.
    *
-   * @param calls   - array of `{ target, value, data }` calls
-   * @param nonce   - the anti-replay nonce from EntryPoint.getNonce
+   * @param calls      - array of `{ target, value, data }` calls
+   * @param nonce      - the anti-replay nonce from EntryPoint.getNonce
    * @param bundlerUrl - bundler RPC URL (defaults to NEXT_PUBLIC_BUNDLER_URL)
    */
   executeBatch: (calls: Call[], nonce: bigint, bundlerUrl?: string) => Promise<void>;
@@ -27,12 +27,14 @@ export interface UseBatchCallReturn {
 }
 
 /**
- * Hook that builds and sends a batch UserOperation via BatchMulticall.
+ * Hook that builds, signs, and sends a batch UserOperation via BatchMulticall.
  *
  * @returns `{ executeBatch, isLoading, userOpHash, error }`
  */
 export function useBatchCall(): UseBatchCallReturn {
   const { address } = useAccount();
+  const chainId = useChainId();
+  const { signMessageAsync } = useSignMessage();
 
   const [isLoading, setIsLoading] = useState(false);
   const [userOpHash, setUserOpHash] = useState<Hex | null>(null);
@@ -44,7 +46,7 @@ export function useBatchCall(): UseBatchCallReturn {
       nonce: bigint,
       bundlerUrl?: string,
     ) => {
-      if (!address) {
+      if (!address || !chainId) {
         setError(new Error('Wallet not connected'));
         return;
       }
@@ -64,8 +66,22 @@ export function useBatchCall(): UseBatchCallReturn {
       setUserOpHash(null);
 
       try {
+        // Build unsigned UserOperation
         const userOp = buildBatchUserOp(calls, address, nonce);
-        const hash = await sendUserOp(userOp, url);
+
+        // Compute the hash the smart account must sign
+        const opHash = getUserOpHash(userOp, chainId);
+
+        // Sign with the connected EOA
+        const signature = await signMessageAsync({
+          message: { raw: opHash },
+        });
+
+        // Attach the signature
+        const signedOp: UserOperation = { ...userOp, signature };
+
+        // Send to bundler
+        const hash = await sendUserOp(signedOp, url);
         setUserOpHash(hash);
       } catch (err) {
         setError(err instanceof Error ? err : new Error(String(err)));
@@ -73,7 +89,7 @@ export function useBatchCall(): UseBatchCallReturn {
         setIsLoading(false);
       }
     },
-    [address],
+    [address, chainId, signMessageAsync],
   );
 
   return { executeBatch, isLoading, userOpHash, error };

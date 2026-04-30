@@ -34,7 +34,7 @@ export interface Permit2TypedData {
  * @param spender  - who is allowed to pull the tokens
  * @param deadline - Unix timestamp (seconds) after which the permit expires
  * @param nonce    - unique nonce (from Permit2 — use `IAllowanceTransfer.nonce`)
- * @param chainId  - the chain ID (required for EIP-712 domain)
+ * @param chainId  - the chain ID (required for EIP-712 domain separation)
  * @returns Typed data object ready for `wallet_signTypedData_v4`
  */
 export function buildPermit2Transfer(
@@ -43,7 +43,7 @@ export function buildPermit2Transfer(
   spender: Address,
   deadline: bigint,
   nonce: bigint,
-  chainId: number = 8453, // Base by default
+  chainId: number,
 ): Permit2TypedData {
   return {
     domain: {

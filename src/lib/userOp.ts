@@ -67,6 +67,11 @@ export interface BuildUserOpParams {
 /**
  * Builds a UserOperation with sensible defaults for missing gas fields.
  *
+ * **Important**: The `maxFeePerGas` and `maxPriorityFeePerGas` fields default to `0n`.
+ * For production use, always fetch live gas prices from the network using
+ * `client.estimateFeesPerGas()` and pass them explicitly. Bundlers will reject
+ * UserOperations with zero gas prices.
+ *
  * @param params - Required + optional UserOp fields
  * @returns A complete `UserOperation` object
  */
